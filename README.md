@@ -19,4 +19,4 @@ ___
 
 5. Run the script, to process data with Mistral LLL and return the answer: 
 
-`python main.py "what is the invoice number value?"`
+`python main.py "retrieve invoice number value"`
