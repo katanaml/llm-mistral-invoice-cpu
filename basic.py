@@ -1,6 +1,7 @@
 import sys
 import timeit
 from ctransformers import AutoModelForCausalLM
+from langchain.prompts import PromptTemplate
 
 if len(sys.argv) > 1:
     a = 1
@@ -31,6 +32,19 @@ llm = AutoModelForCausalLM.from_pretrained(
         # local_files_only=True,
         model_path_or_repo_id=model_local_path
 )
+prompt = PromptTemplate.from_template(
+    """You are an expert AI assistant that helps user's with friendly and detailed answers
+
+Use the following pieces of information to answer the user's question.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+Question: {question}
+
+Only return the helpful answer below and nothing else.
+Helpful answer:
+"""
+)
+message= prompt.format(question=message)
 result = llm(message)
 end = timeit.default_timer()
 

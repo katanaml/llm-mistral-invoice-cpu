@@ -156,5 +156,6 @@ cython_debug/
 # Mac
 .DS_Store
 models/mistral-7b-instruct-v0.1.Q5_K_M.gguf
+/models/mistral-7b-instruct-v0.1.Q2_K.gguf
 vectorstore/db_faiss/index.faiss
 vectorstore/db_faiss/index.pkl
