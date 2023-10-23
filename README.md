@@ -20,3 +20,19 @@ ___
 5. Run the script, to process data with Mistral LLL and return the answer: 
 
 `python main.py "retrieve invoice number value"`
+
+
+# Mistral 7b quantized model on local CPU
+
+___
+
+## Quickstart
+
+1. Download the Mistral model, check models/model_download.txt for the download link.
+2. Install the requirements: 
+
+`pip install -r requirements.txt`
+
+3. Run the script, to get response with Mistral LLM local model and return the answer: 
+
+`python main.py "python3 ./basic.py "define quantum physics"`
