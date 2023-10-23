@@ -14,7 +14,8 @@ model_TheBloke = "TheBloke/Mistral-7B-Instruct-v0.1-GGUF"
 model_mistral_Q5_K_M = "mistral-7b-instruct-v0.1.Q5_K_M.gguf"
 model_mistral_Q2_K = "mistral-7b-instruct-v0.1.Q2_K.gguf"
 model_type_mistral = "mistral"
-model_local_path = "./models/mistral-7b-instruct-v0.1.Q2_K.gguf"
+# model_local_path = "./models/mistral-7b-instruct-v0.1.Q2_K.gguf"
+model_local_path= "./models/mistral-7b-instruct-v0.1.Q5_K_M.gguf"
 
 # model_name = model_mistral_Q2_K
 # model_local_path= "./models/{model_name}"
