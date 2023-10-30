@@ -7,3 +7,4 @@ sentence-transformers
 python-dotenv
 llama-cpp-python
 langchain-experimental
+psycopg2-binary
