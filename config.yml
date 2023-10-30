@@ -9,4 +9,3 @@ MODEL_BIN_PATH: 'models/mistral-7b-instruct-v0.1.Q5_K_M.gguf'
 EMBEDDINGS: 'sentence-transformers/all-mpnet-base-v2'
 MAX_NEW_TOKENS: 1048
 TEMPERATURE: 0.01
-POSTGRES_DB_URL: 'postgresql+psycopg2://s8user%40s8postgres:3%5EcZ%218uWZ%2563mU@s8postgres.postgres.database.azure.com:5432/ncrportaldb_v2'

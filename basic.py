@@ -1,13 +1,16 @@
 import sys
 import timeit
-import yaml
+
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 import box
 import yaml
 
 from langchain.sql_database import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
-from langchain_experimental.sql import SQLDatabaseChain
+from langchain_experimental.sql import SQLDatabaseChain,SQLDatabaseSequentialChain
 
 from langchain.llms.llamacpp import LlamaCpp
 from langchain.prompts import PromptTemplate
@@ -36,8 +39,10 @@ model_type_mistral = "mistral"
 model_type_llama = "llama"
 model_local_path_Q2_K = "./models/mistral-7b-instruct-v0.1.Q2_K.gguf"
 model_local_path= "./models/mistral-7b-instruct-v0.1.Q5_K_M.gguf"
+DB_URL=os.getenv('POSTGRES_DB_URL')
 
 print(f'\nModel used: {model_local_path}')
+print(f'\nDB URL: {DB_URL}')
 
 start = timeit.default_timer()
 
@@ -48,6 +53,7 @@ llm = LlamaCpp(
     top_p=1,
     # callback_manager=callback_manager,
     verbose=True,  # Verbose is required to pass to the callback manager
+    n_ctx=2048
 )
 
 # print(llm("AI is going to"))
@@ -57,9 +63,10 @@ llm = LlamaCpp(
 # """
 # llm(prompt)
 
+
 db = SQLDatabase.from_uri(
-    f"{cfg.POSTGRES_DB_URL}",
-    include_tables=["_prisma_migrations"]
+    f"{DB_URL}",
+    include_tables=["notifications"]
     # f"postgresql+psycopg2://{(username)}:{(password)}@{(host)}:5432/{(database)}",
 )
 
