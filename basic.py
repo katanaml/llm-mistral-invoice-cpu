@@ -66,9 +66,11 @@ llm = LlamaCpp(
 
 db = SQLDatabase.from_uri(
     f"{DB_URL}",
-    include_tables=["notifications"]
+    include_tables=['projects']
     # f"postgresql+psycopg2://{(username)}:{(password)}@{(host)}:5432/{(database)}",
 )
+
+schema = db.get_table_info(table_names=['projects'])
 
 chain = SQLDatabaseChain.from_llm(llm=llm,db=db,verbose=True)
 
@@ -80,9 +82,12 @@ SQLQuery: SQL Query to run
 SQLResult: Result of the SQLQuery
 Answer: Final answer here
 
+Use the following info for your ease in generating queries:
+{schema}
+
 {question}
 """
-message = QUERY.format(question=message)
+message = QUERY.format(question=message,schema=schema)
 result = chain.invoke(message)
 
 end = timeit.default_timer()
