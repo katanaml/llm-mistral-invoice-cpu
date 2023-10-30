@@ -53,7 +53,7 @@ llm = LlamaCpp(
     top_p=1,
     # callback_manager=callback_manager,
     verbose=True,  # Verbose is required to pass to the callback manager
-    n_ctx=2048
+    n_ctx=4096
 )
 
 # print(llm("AI is going to"))

@@ -6,3 +6,4 @@ python-box
 sentence-transformers
 python-dotenv
 llama-cpp-python
+langchain-experimental
