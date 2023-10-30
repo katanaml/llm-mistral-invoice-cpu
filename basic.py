@@ -41,7 +41,7 @@ set_llm_cache(SQLiteCache(database_path="langchain_cache.db"))
 
 llm = LlamaCpp(
     model_path=model_local_path,
-    temperature=0,
+    temperature=0.2,
     max_tokens=8000,
     top_p=1,
     verbose=False,  # Verbose is required to pass to the callback manager
@@ -50,10 +50,10 @@ llm = LlamaCpp(
 
 db = SQLDatabase.from_uri(
     f"{DB_URL}",
-    include_tables=['documents']
+    include_tables=['projects']
 )
 
-schema = db.get_table_info(table_names=['documents'])
+schema = db.get_table_info(table_names=['projects'])
 
 chain = SQLDatabaseChain.from_llm(llm=llm,db=db,verbose=False)
 
