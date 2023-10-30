@@ -5,3 +5,4 @@ pypdf
 python-box
 sentence-transformers
 python-dotenv
+llama-cpp-python

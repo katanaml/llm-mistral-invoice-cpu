@@ -1,5 +1,9 @@
 import sys
 import timeit
+
+from langchain.llms import ctransformers, LlamaCpp
+from langchain.llms import huggingface_pipeline
+
 from ctransformers import AutoModelForCausalLM
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
@@ -7,8 +11,18 @@ from langchain.agents import create_sql_agent,AgentType
 from langchain.sql_database import SQLDatabase
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain_experimental.sql import SQLDatabaseChain
-import os
-from dotenv import load_dotenv
+
+from transformers import AutoTokenizer, AutoModelForTokenClassification
+from transformers import pipeline
+
+from transformers import MistralForCausalLM
+
+
+from langchain.llms import LlamaCpp
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langchain.callbacks.manager import CallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 
 
 if len(sys.argv) > 1:
@@ -23,60 +37,86 @@ model_TheBloke = "TheBloke/Mistral-7B-Instruct-v0.1-GGUF"
 model_mistral_Q5_K_M = "mistral-7b-instruct-v0.1.Q5_K_M.gguf"
 model_mistral_Q2_K = "mistral-7b-instruct-v0.1.Q2_K.gguf"
 model_type_mistral = "mistral"
-# model_local_path = "./models/mistral-7b-instruct-v0.1.Q2_K.gguf"
+model_type_llama = "llama"
+model_local_path_Q2_K = "./models/mistral-7b-instruct-v0.1.Q2_K.gguf"
 model_local_path= "./models/mistral-7b-instruct-v0.1.Q5_K_M.gguf"
 
-# model_name = model_mistral_Q2_K
-# model_local_path= "./models/{model_name}"
+print(f'\nModel used: {model_local_path}')
 
-# print(f'\nModel used: {model_local_path}')
+
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_TheBloke,
+#     # pretrained_model_name_or_path=model_local_path,
+#     model_type=model_type_mistral,
+#     # model_file=model_mistral_Q5_K_M,
+#     local_files_only=True,
+#     gpu_layers=0
+# )
+
+# # print(model("AI is going to"))
+
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_TheBloke,
+#     # pretrained_model_name_or_path=model_local_path,
+#     # model_type=model_type_llama,
+#     # model_file=model_mistral_Q5_K_M,
+#     # local_files_only=True,
+#     # gpu_layers=0
+# )
+
+# pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=10)
+
+# pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=10)
+
+# Make sure the model path is correct for your system!
+llm = LlamaCpp(
+    model_path="< path to the GGUF file you downloaded >",
+    temperature=0.75,
+    max_tokens=2000,
+    top_p=1,
+    # callback_manager=callback_manager,
+    verbose=True,  # Verbose is required to pass to the callback manager
+)
+
+prompt = """
+Question: A rap battle between Stephen Colbert and John Oliver
+"""
+llm(prompt)
 
 start = timeit.default_timer()
-# llm = AutoModelForCausalLM.from_pretrained(
-#         # model_TheBloke,
+
+# llm = huggingface_pipeline(
+#         model_TheBloke,
+#         model=model,
+#         tokenizer=tokenizer,
 #         # model_file=model_mistral_Q5_K_M,
 #         model_type=model_type_mistral,
 #         gpu_layers=0,
-#         # local_files_only=True,
-#         model_path_or_repo_id=model_local_path
+#         local_files_only=True,
+#         model_path_or_repo_id=model_local_path,
+#         task="text-generation",
+#         # pipeline_kwargs={"max_new_tokens": 10},
+#         # model_kwargs={"temperature": 0, "max_length": 64, 'device': 'cpu'}
 # )
-# prompt = PromptTemplate.from_template(
-#     """You are an expert AI assistant that helps user's with friendly and detailed answers
 
-# Use the following pieces of information to answer the user's question.
-# If you don't know the answer, just say that you don't know, don't try to make up an answer.
+# llm = vars(llm)
+#  hf = HuggingFacePipeline.from_model_id(
+#                 model_id="gpt2",
+#                 task="text-generation",
+#                 pipeline_kwargs={"max_new_tokens": 10},
+#             )
 
-# Question: {question}
-
-# Only return the helpful answer below and nothing else.
-# Helpful answer:
-# """
+# hf = huggingface_pipeline(
+#     pipeline=pipe,
+#     # local_files_only=True
+#     gpu_layers=0,
 # )
-# message= prompt.format(question=message)
-# result = llm(message)
-load_dotenv()
-open_ai_key= os.getenv("OPENAI_API_KEY")
 
 db = SQLDatabase.from_uri(
     f"postgresql+psycopg2://s8user%40s8postgres:3%5EcZ%218uWZ%2563mU@s8postgres.postgres.database.azure.com:5432/ncrportaldb_v2",
     # f"postgresql+psycopg2://{(username)}:{(password)}@{(host)}:5432/{(database)}",
 )
 
-llm = ChatOpenAI(model="gpt-3.5-turbo-16k",temperature=0, openai_api_key=open_ai_key)
-
-# memory = SQLChatMessageHistory(
-#     session_id='test_session',
-#     connection_string='sqlite:///sqlite.db'
-# )
-# entity_store = SQLiteEntityStore(db_file='sqlite.db')
-# agent = create_sql_agent(
-#     llm=llm,
-#     toolkit=SQLDatabaseToolkit(db=db,llm=llm),
-#     # verbose=True,
-#     agent_type= AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-#     handle_parsing_errors=True
-#     # memory=memory
-#     )
 chain = SQLDatabaseChain.from_llm(llm=llm,db=db,verbose=True)
 
 QUERY = """
@@ -91,12 +131,10 @@ Answer: Final answer here
 """
 message = QUERY.format(question=message)
 result = chain.run(message)
-print(result)
-
 
 end = timeit.default_timer()
 
 print(f'\nAnswer: {result}')
-print('='*150)
+print('='*180)
 
 print(f"Time to retrieve answer: {end - start}")
