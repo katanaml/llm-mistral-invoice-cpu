@@ -1,6 +1,6 @@
 ctransformers
 faiss-cpu
-langchain
+langchain==0.0.331
 pypdf
 python-box
 sentence-transformers

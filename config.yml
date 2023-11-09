@@ -8,4 +8,4 @@ MODEL_TYPE: 'mistral'
 MODEL_BIN_PATH: 'models/mistral-7b-instruct-v0.1.Q5_K_M.gguf'
 EMBEDDINGS: 'sentence-transformers/all-mpnet-base-v2'
 MAX_NEW_TOKENS: 1048
-TEMPERATURE: 0.01
+TEMPERATURE: 0.00

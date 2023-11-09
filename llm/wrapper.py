@@ -17,8 +17,10 @@ def set_qa_prompt():
     """
     Prompt template for QA retrieval for each vectorstore
     """
+
     prompt = PromptTemplate(template=qa_template,
                             input_variables=['context', 'question'])
+
     return prompt
 
 
