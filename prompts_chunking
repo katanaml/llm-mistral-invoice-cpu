@@ -1,0 +1,32 @@
+VECTOR_COUNT (search results): 1
+
+python main.py --semantic_search=True "retrieve two values: total gross worth and invoice number. format response as following {\"total_gross_worth\": {}, \"invoice_number\": {}}"
+
+Semantic search: [Document(page_content='10%\n 192,81\n 19,28\n 212,09\n \n Total\n $ 192,81\n $ 19,28\n $ 212,09', metadata={'source': 'data/invoice_1.pdf', 'page': 0})]
+==================================================
+Time to retrieve answer: 4.134768731892109
+
+
+python main.py "retrieve two values: total gross worth and invoice number. format response as following {\"total_gross_worth\": {}, \"invoice_number\": {}}"
+
+Answer: {"total_gross_worth": 231,179, "invoice_number": "100001", "error_message": null}
+==================================================
+Time to retrieve answer: 25.356119215022773
+
+*******************************************************************************************************
+
+VECTOR_COUNT (search results): 2
+
+python main.py --semantic_search=True "retrieve two values: total gross worth and invoice number. format response as following {\"total_gross_worth\": {}, \"invoice_number\": {}}"
+
+Semantic search: [Document(page_content='10%\n 192,81\n 19,28\n 212,09\n \n Total\n $ 192,81\n $ 19,28\n $ 212,09', metadata={'source': 'data/invoice_1.pdf', 'page': 0}),
+Document(page_content='Invoice no: 61356291\nDate of issue:\n09/06/2012\nSeller:\nChapman, Kim and Green\n64731 James Branch\nSmithmouth, NC 26872\nTax Id: 949-84-9105\nIBAN: GB50ACIE59715038217063\nClient:\nRodriguez-Stevens\n2280 Angela Plain\nHortonshire, MS 93248\nTax Id: 939-98-8477\nITEMS\nNo.\nDescription\nQty\nUM\nNet price', metadata={'source': 'data/invoice_1.pdf', 'page': 0})]
+==================================================
+Time to retrieve answer: 3.415067370980978
+
+
+python main.py "retrieve two values: total gross worth and invoice number. format response as following {\"total_gross_worth\": {}, \"invoice_number\": {}}"
+
+Answer: {"total_gross_worth": 212.09, "invoice_number": 61356291}
+==================================================
+Time to retrieve answer: 41.230755996890366
